@@ -104,7 +104,6 @@ app.post('/users', (req, res) => {
     }
     userToAdd.id = id;
     addUser(userToAdd);
-    console.log(userToAdd);
     res.status(201).send(userToAdd);
 });
 
