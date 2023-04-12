@@ -7,16 +7,21 @@ function App() {
   const [characters, setCharacters] = useState([]);
 
   function removeOneCharacter (index) {
-    const updated = characters.filter((character, i) => {
+    const updated = characters.filter(async (character, i) => {
+        if(i === index){
+          console.log(character);
+          await axios.delete('http://localhost:5000/users/' + character.id);
+        }
         return i !== index
-      });
-      setCharacters(updated);
+    });
+    console.log("hit");
+    setCharacters(updated);
   }
   
 
   function updateList(person) {
     makePostCall(person).then(result => {
-      if(result && result.status === 200){
+      if(result && result.status === 201){
         setCharacters([...characters, person]);
       }
     })
@@ -37,7 +42,7 @@ function App() {
   useEffect(() => {
       fetchAll().then( result => {
           if(result){
-              console.log(result);
+              //console.log(result);
               setCharacters(result);
           }
       })
@@ -63,7 +68,5 @@ function App() {
     </div>
   );
 }
-
-
 
 export default App;

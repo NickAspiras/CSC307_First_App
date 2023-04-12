@@ -98,12 +98,49 @@ function findUserById(id) {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    let id = generateID();
+    while(findUserById(id) !== undefined && findUserById(id).length > 0){
+        id = generateID();
+    }
+    userToAdd.id = id;
     addUser(userToAdd);
-    res.status(200).end();
+    console.log(userToAdd);
+    res.status(201).send(userToAdd);
 });
 
 function addUser(user){
     users['users_list'].push(user);
+}
+/*
+function generateID() {
+    let length = 6;
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    const numbers = '';
+    const numbersLength = numbers.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+*/
+
+function generateID() {
+    let length = 6;
+    let result = '';
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const charactersLength = characters.length;
+    const numbers = '0123456789';
+    const numbersLength = numbers.length;
+    let numbersStr = '';
+    for(let i = 0; i < 3; i++){
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        numbersStr += numbers.charAt(Math.floor(Math.random() * numbersLength));
+    }
+    return result + numbersStr;
 }
 
 app.delete('/users/:id', (req, res) => {
@@ -113,12 +150,20 @@ app.delete('/users/:id', (req, res) => {
         
     }
     else{
-        users['users_list'].pop(result);
-        res.send(users);
+        let idx = findUserIndex(req.params.id);
+        users['users_list'].splice(idx, 1);
+        res.status(204).send(users);
     }
     
     
-})
+});
+
+function findUserIndex(id){
+    const requiredIndex = users['users_list'].findIndex(character => {
+        return character.id === String(id);
+    });
+    return requiredIndex;
+}
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
