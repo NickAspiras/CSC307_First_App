@@ -10,7 +10,7 @@ function App() {
     const updated = characters.filter(async (character, i) => {
         if(i === index){
           console.log(character);
-          await axios.delete('http://localhost:5000/users/' + character.id);
+          await axios.delete('http://localhost:8000/users/' + character.id);
         }
         return i !== index
     });
@@ -30,7 +30,7 @@ function App() {
 
   async function fetchAll(){
     try {
-       const response = await axios.get('http://localhost:5000/users');
+       const response = await axios.get('http://localhost:8000/users');
        return response.data.users_list;     
     }
     catch (error){
@@ -50,7 +50,7 @@ function App() {
 
   async function makePostCall(person){
     try {
-       const response = await axios.post('http://localhost:5000/users', person);
+       const response = await axios.post('http://localhost:8000/users', person);
        return response;     
     }
     catch (error){
