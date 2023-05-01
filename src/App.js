@@ -10,11 +10,10 @@ function App() {
     const updated = characters.filter(async (character, i) => {
         if(i === index){
           console.log(character);
-          await axios.delete('http://localhost:8000/users/' + character.id);
+          await axios.delete('http://localhost:8000/users/' + character._id);
         }
         return i !== index
     });
-    console.log("hit");
     setCharacters(updated);
   }
   
